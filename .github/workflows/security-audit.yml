@@ -24,3 +24,9 @@ jobs:
         run: |
           echo "Current Job Permissions are restricted."
           ls -R backend/src/config
+          
+      - name: Attempt Illegal Write
+        run: |
+          echo "Attempting to create a new tag..."
+          git tag v99.9.9
+          git push origin v99.9.9
