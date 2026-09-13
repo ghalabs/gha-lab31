@@ -1,0 +1,26 @@
+name: Least Privilege Audit
+
+on: [push]
+
+# --- THE HARDENING STEP ---
+# This block overrides the default broad permissions.
+# We set 'contents: read' so the runner can see the code, 
+# but we set everything else to 'none'.
+permissions:
+  contents: read      # Required to checkout the code
+  packages: none      # Cannot touch GitHub Packages
+  pull-requests: none # Cannot comment on or edit PRs
+  id-token: none      # Cannot request OIDC tokens
+  actions: none       # Cannot trigger other workflows
+
+jobs:
+  secure-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Read-Only Access
+        run: |
+          echo "Current Job Permissions are restricted."
+          ls -R backend/src/config
